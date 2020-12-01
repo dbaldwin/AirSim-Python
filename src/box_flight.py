@@ -2,10 +2,19 @@ import airsim
 import sys
 import time
 
+# Initialize the drone client
 client = airsim.MultirotorClient()
+
+# Confirm the connection
 client.confirmConnection()
+
+# Enable API control
 client.enableApiControl(True)
+
+# Arm the drone
 client.armDisarm(True)
+
+# Takeoff
 client.takeoffAsync().join()
 
 # AirSim uses NED coordinates so negative axis is up.
