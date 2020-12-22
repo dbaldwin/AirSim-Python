@@ -45,7 +45,7 @@ def getVideoFrame():
             sys.exit(0)
         else:
             png = cv2.imdecode(airsim.string_to_uint8_array(rawImage), cv2.IMREAD_UNCHANGED)
-            cv2.putText(png,'FPS ' + str(fps),textOrg, fontFace, fontScale, (255,0,255), thickness)
+            cv2.putText(png, 'FPS ' + str(fps), textOrg, fontFace, fontScale, (255,0,255), thickness)
 
             (H, W) = png.shape[:2]
 
@@ -57,12 +57,20 @@ def getVideoFrame():
 
             # If markers are detected
             if ids is not None:
+
                 # Enumerate each marker and draw its boundaries
                 for i in range(len(ids)):
                     cv2.line(png, tuple(corners[i][0][0]), tuple(corners[i][0][1]), (0, 255, 0), 2)
                     cv2.line(png, tuple(corners[i][0][1]), tuple(corners[i][0][2]), (0, 255, 0), 2)
                     cv2.line(png, tuple(corners[i][0][2]), tuple(corners[i][0][3]), (0, 255, 0), 2)
                     cv2.line(png, tuple(corners[i][0][3]), tuple(corners[i][0][0]), (0, 255, 0), 2)
+
+                    # Draw marker id
+                    x = int(corners[i][0][1][0]) + 5
+                    y = int(corners[i][0][0][1]) + 10
+                    cv2.putText(png, str(ids[i][0]), (x, y), fontFace, fontScale, (255, 0, 255), thickness)
+
+
 
             cv2.imshow("Video", png)
 
