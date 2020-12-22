@@ -31,7 +31,7 @@ def getVideoFrame():
     textSize, baseline = cv2.getTextSize("FPS", fontFace, fontScale, thickness)
     textOrg = (10, 10 + textSize[1])
     frameCount = 0
-    startTime = time.process_time()
+    startTime = time.time()
     fps = 0
 
     # Infinite loop
@@ -45,27 +45,29 @@ def getVideoFrame():
             sys.exit(0)
         else:
             png = cv2.imdecode(airsim.string_to_uint8_array(rawImage), cv2.IMREAD_UNCHANGED)
-            cv2.putText(png,'FPS ' + str(fps),textOrg, fontFace, fontScale,(255,0,255),thickness)
+            cv2.putText(png,'FPS ' + str(fps),textOrg, fontFace, fontScale, (255,0,255), thickness)
 
             (H, W) = png.shape[:2]
 
-            cv2.circle(png, center=(png.shape[1]-10, 10), radius=4, color=(0, 255, 0), thickness=-1)
+            #cv2.circle(png, center=(png.shape[1]-10, 10), radius=4, color=(0, 255, 0), thickness=-1)
             
             gray = cv2.cvtColor(png, cv2.COLOR_BGR2GRAY)
 
             corners, ids, rejectedImgPoints = aruco.detectMarkers(gray, aruco_dict, parameters=aruco_params)
 
-            # Draw the boundary around the marker
+            # If markers are detected
             if ids is not None:
-                cv2.line(png, tuple(corners[0][0][0]), tuple(corners[0][0][1]), (0, 255, 0), 2)
-                cv2.line(png, tuple(corners[0][0][1]), tuple(corners[0][0][2]), (0, 255, 0), 2)
-                cv2.line(png, tuple(corners[0][0][2]), tuple(corners[0][0][3]), (0, 255, 0), 2)
-                cv2.line(png, tuple(corners[0][0][3]), tuple(corners[0][0][0]), (0, 255, 0), 2)
+                # Enumerate each marker and draw its boundaries
+                for i in range(len(ids)):
+                    cv2.line(png, tuple(corners[i][0][0]), tuple(corners[i][0][1]), (0, 255, 0), 2)
+                    cv2.line(png, tuple(corners[i][0][1]), tuple(corners[i][0][2]), (0, 255, 0), 2)
+                    cv2.line(png, tuple(corners[i][0][2]), tuple(corners[i][0][3]), (0, 255, 0), 2)
+                    cv2.line(png, tuple(corners[i][0][3]), tuple(corners[i][0][0]), (0, 255, 0), 2)
 
             cv2.imshow("Video", png)
 
         frameCount  = frameCount  + 1
-        endTime = time.process_time()
+        endTime = time.time()
         diff = endTime - startTime
         if (diff > 1):
             fps = frameCount
@@ -80,12 +82,12 @@ def getVideoFrame():
 
 # Establish connection with AirSim
 client = airsim.MultirotorClient()
-client.confirmConnection()
-client.enableApiControl(True)
-client.armDisarm(True)
+# client.confirmConnection()
+# client.enableApiControl(True)
+# client.armDisarm(True)
 
 # Takeoff
-client.takeoffAsync().join()
+#client.takeoffAsync().join()
 
 # Begin the video thread
 videoThread = Thread(target=getVideoFrame)
@@ -94,4 +96,4 @@ videoThread.start()
 time.sleep(1)
 
 # Fly to the ArUco Tower
-client.moveToPositionAsync(220, -15, 35, 10)
+#client.moveToPositionAsync(220, -15, 35, 10)
