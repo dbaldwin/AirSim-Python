@@ -3,19 +3,6 @@ import sys
 from threading import Thread # So we can get the camera feed and send commands in parallel
 from aruco.ArucoUtils import ArucoUtils
 
-# Setup default camera
-cameraType = "scene"
-
-# All camera types
-cameraTypeMap = { 
- "depth": airsim.ImageType.DepthVis,
- "segmentation": airsim.ImageType.Segmentation,
- "seg": airsim.ImageType.Segmentation,
- "scene": airsim.ImageType.Scene,
- "disparity": airsim.ImageType.DisparityNormalized,
- "normals": airsim.ImageType.SurfaceNormals
-}
-
 # Establish connection with AirSim
 client = airsim.MultirotorClient()
 # client.confirmConnection()
@@ -25,8 +12,10 @@ client = airsim.MultirotorClient()
 # Takeoff
 #client.takeoffAsync().join()
 
-temp = ArucoUtils(client, cameraTypeMap[cameraType])
+temp = ArucoUtils(client, "scene")
 temp.getVideoFrame()
+
+#print(temp.getFrame())
 
 # Begin the video thread
 # videoThread = Thread(target=getVideoFrame)

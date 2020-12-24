@@ -5,11 +5,20 @@ import time
 
 class ArucoUtils:
 
+    cameraTypeMap = { 
+        "depth": airsim.ImageType.DepthVis,
+        "segmentation": airsim.ImageType.Segmentation,
+        "seg": airsim.ImageType.Segmentation,
+        "scene": airsim.ImageType.Scene,
+        "disparity": airsim.ImageType.DisparityNormalized,
+        "normals": airsim.ImageType.SurfaceNormals
+    }
+
     def __init__(self, client, cameraType):
         self.client = client
         self.aruco_dict = aruco.Dictionary_get(aruco.DICT_ARUCO_ORIGINAL)
         self.aruco_params = aruco.DetectorParameters_create()
-        self.cameraType = cameraType
+        self.cameraType = self.cameraTypeMap[cameraType]
 
     # Get images from AirSim API
     def getVideoFrame(self):
@@ -88,3 +97,17 @@ class ArucoUtils:
             key = cv2.waitKey(1) & 0xFF
             if (key == 27 or key == ord('q') or key == ord('x')):
                 break
+
+    def getFrame(self):
+
+        rawImage = self.client.simGetImage("0", self.cameraType)
+
+        if rawImage is None:
+            print("No image returned")
+            sys.exit(0)
+        else:
+            # Decode the image
+            png = cv2.imdecode(airsim.string_to_uint8_array(rawImage), cv2.IMREAD_UNCHANGED)
+
+        return png
+
