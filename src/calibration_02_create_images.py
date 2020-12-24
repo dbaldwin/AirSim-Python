@@ -5,12 +5,6 @@ from aruco.ArucoUtils import ArucoUtils
 import time
 from threading import Thread
 
-# Create aruco chessboard then we load it into Unreal
-# aruco_dict = aruco.Dictionary_get(aruco.DICT_ARUCO_ORIGINAL)
-# board = cv2.aruco.CharucoBoard_create(3, 3, .025, .0125, aruco_dict)
-# image_board = board.draw((200 * 3, 200 * 3))
-# cv2.imwrite('charuco.png', image_board)
-
 # Initialize the drone object
 drone = airsim.MultirotorClient()
 drone.confirmConnection()
