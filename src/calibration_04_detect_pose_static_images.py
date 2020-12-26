@@ -3,7 +3,7 @@ from cv2 import aruco
 import pickle
 import os
 
-# Open the calibration parameter file crated from step 3
+# Open the calibration parameter file created from step 3
 calibration = open('.\src\calibration\calibration.pckl', 'rb')
 
 # Grab the data and store it in variables
