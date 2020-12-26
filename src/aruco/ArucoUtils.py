@@ -17,15 +17,15 @@ class ArucoUtils:
     def __init__(self):
         self.aruco_dict = aruco.Dictionary_get(aruco.DICT_ARUCO_ORIGINAL)
         self.aruco_params = aruco.DetectorParameters_create()
+        self.font_face = cv2.FONT_HERSHEY_SIMPLEX
+        self.font_scale = 0.5
 
     # Get images from AirSim API
-    def getVideoFrame(self, client, imageType):
+    def getVideoFrameAndDrawMarkers(self, client, imageType):
 
         # Display FPS
-        fontFace = cv2.FONT_HERSHEY_SIMPLEX
-        fontScale = 0.5
         thickness = 2
-        textSize, baseline = cv2.getTextSize("FPS", fontFace, fontScale, thickness)
+        textSize, baseline = cv2.getTextSize("FPS", self.font_face, self.font_scale, thickness)
         textOrg = (10, 10 + textSize[1])
         frameCount = 0
         startTime = time.time()
@@ -42,10 +42,10 @@ class ArucoUtils:
                 sys.exit(0)
             else:
                 png = cv2.imdecode(airsim.string_to_uint8_array(rawImage), cv2.IMREAD_UNCHANGED)
-                cv2.putText(png, 'FPS ' + str(fps), textOrg, fontFace, fontScale, (255,0,255), thickness)
+                cv2.putText(png, 'FPS ' + str(fps), textOrg, self.font_face, self.font_scale, (255,0,255), thickness)
 
                 # Pass the image into the detection function to draw boundaries
-                self.detectMarkers(png)
+                self.drawMarkers(png)
 
             frameCount  = frameCount  + 1
             endTime = time.time()
@@ -74,9 +74,12 @@ class ArucoUtils:
         return png
 
 
-    def detectMarkers(self, image):
+    def drawMarkers(self, image):
 
+        # Convert the frame to gray
         gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+
+        # Detect maker corners and ids
         corners, ids, rejected = aruco.detectMarkers(gray, self.aruco_dict, parameters=self.aruco_params)
 
         # If markers are detected
@@ -113,3 +116,7 @@ class ArucoUtils:
 
                 # Display the video frame
                 cv2.imshow("Video", image)
+
+    def detectPose(self):
+        pass
+        
