@@ -1,3 +1,6 @@
+"""
+This script demonstrates how to fly in a box pattern using different DriveTrain and YawMode types. The coordinates are the same for each pass and it's the YawMode and DriveTrain values that lead to different orientation.
+"""
 import airsim
 import sys
 import time
