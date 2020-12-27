@@ -114,8 +114,8 @@ class ArucoUtils:
                 # Display marker ID
                 cv2.putText(image, str(markerID), (topLeft[0], topLeft[1]-10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 2)
 
-                # Display the video frame
-                cv2.imshow("Video", image)
+        # Display the video frame
+        cv2.imshow("Video", image)
 
     def detectPose(self):
         pass
