@@ -62,6 +62,13 @@ def fly(direction):
 
     t.start()
 
+# Yaw 
+def yaw(direction):
+    if (direction == 'left'):
+        flyClient.rotateByYawRateAsync(-5, 1)
+    elif (direction == 'right'):
+        flyClient.rotateByYawRateAsync(5, 1)
+
 
 # Client for gathering images from camera
 imageClient = airsim.MultirotorClient()
@@ -104,7 +111,6 @@ while True:
     # Show the pose
     cv2.imshow('Pose', frame)
 
-
     # Listen for key presses to control drone or quit script
     key = cv2.waitKey(1) & 0xFF
 
@@ -119,10 +125,14 @@ while True:
         fly('backward')
     elif (key == ord('d')):
         fly('right')
-    elif(key == ord('e')):
+    elif (key == ord('e')):
         fly('up')
-    elif(key == ord('q')):
+    elif (key == ord('q')):
         fly('down')
+    elif (key == ord('j')):
+        yaw('left')
+    elif (key == ord('k')):
+        yaw('right')
     # Escape or x will exit the script
     elif (key == 27 or key == ord('x')):
         break
