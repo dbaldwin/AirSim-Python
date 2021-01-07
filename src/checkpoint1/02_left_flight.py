@@ -17,16 +17,15 @@ client.enableApiControl(True, which_drone)
 client.armDisarm(True, which_drone)
 
 # Takeoff
-client.takeoffAsync(30, which_drone).join()
+client.takeoffAsync(5, which_drone).join()
 
 # Fly right
 client.moveByVelocityAsync(0, 1, 0, 4, airsim.DrivetrainType.MaxDegreeOfFreedom, airsim.YawMode(False, 0), which_drone).join()
 
-# Fly forward through ring
-client.moveByVelocityAsync(5, 0, 0, 9, airsim.DrivetrainType.MaxDegreeOfFreedom, airsim.YawMode(False, 0), which_drone).join()
+# Yaw right and then fly left through the ring
+client.moveByVelocityAsync(2.5, 0, 0, 16, airsim.DrivetrainType.MaxDegreeOfFreedom,  airsim.YawMode(False, 90), which_drone).join()
 
-#client.moveByMotorPWMsAsync(1, 0.5, 0.5, 1, 5).join()
-
+# Delay so drone can settle before landing
 time.sleep(3)
 
 # Land
