@@ -22,8 +22,8 @@ aruco_dict = aruco.Dictionary_get(aruco.DICT_ARUCO_ORIGINAL)
 # Create the airsim client
 flyClient = airsim.MultirotorClient()
 flyClient.confirmConnection()
-flyClient.enableApiControl(True)
-flyClient.armDisarm(True)
+#flyClient.enableApiControl(True)
+#flyClient.armDisarm(True)
 
 # Takeoff thread
 def takeoff():
